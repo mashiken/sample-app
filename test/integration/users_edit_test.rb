@@ -21,9 +21,11 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
   
   test "successful edit" do
-    log_in_as(@user)
     get edit_user_path(@user)
-    assert_template 'users/edit'
+    log_in_as(@user)
+    #  転送先URLの確認(次回転送先がデフォルトになっているか)
+    assert_nil session[:forwarding_url]
+    assert_redirected_to edit_user_url(@user)
     name = "Foo bar"
     email = "foo@bar.com"
     patch user_path(@user), params: { user: {name: name,
